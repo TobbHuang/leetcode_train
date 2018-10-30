@@ -5,8 +5,6 @@ import java.util.*;
  */
 public class p18 {
 
-    // to be continued
-
     public List<List<Integer>> fourSum(int[] nums, int target) {
         Map<Integer, Integer> map = new HashMap<>();
         for(int m : nums){
@@ -23,31 +21,23 @@ public class p18 {
         Collections.sort(keys);
 
         for (int k = 0; k < keys.size(); k++) {
+            map.put(keys.get(k), map.get(keys.get(k)) - 1);
 
-            Map<Integer, Integer> map1 = (Map<Integer, Integer>) ((HashMap<Integer, Integer>) map).clone();
-            map1.put(keys.get(k), map1.get(keys.get(k)) - 1);
-
-            for (int i = 0; i < keys.size() && keys.get(i) < 0; i++) {
-                for (int j = i + 1; j < keys.size(); j++) {
-
-                    int target1 = (target - keys.get(k) - keys.get(i) - keys.get(j)) * -1;
-                    if (keys.get(i) * 2 + keys.get(j) == 0 && map1.get(keys.get(i)) >= 2) {
-                        List<Integer> list = new ArrayList<>();
-                        list.add(keys.get(i));
-                        list.add(keys.get(i));
-                        list.add(keys.get(j));
-                        results.add(list);
-                    } else if (keys.get(i) + keys.get(j) * 2 == 0 && map1.get(keys.get(j)) >= 2) {
-                        List<Integer> list = new ArrayList<>();
-                        list.add(keys.get(i));
-                        list.add(keys.get(j));
-                        list.add(keys.get(j));
-                        results.add(list);
-                    }
-                    if (target1 <= keys.get(j))
+            for (int i = k; i < keys.size(); i++) {
+                if (map.get(keys.get(i)) == 0) {
+                    continue;
+                }
+                map.put(keys.get(i), map.get(keys.get(i)) - 1);
+                for (int j = i; j < keys.size(); j++) {
+                    if (map.get(keys.get(j)) == 0) {
                         continue;
+                    }
+                    int target1 = (target - keys.get(k) - keys.get(i) - keys.get(j));
+                    if (target1 < keys.get(j))
+                        break;
 
-                    if (map1.containsKey(target1)) {
+                    map.put(keys.get(j), map.get(keys.get(j)) - 1);
+                    if (map.containsKey(target1) && map.get(target1) > 0) {
                         List<Integer> list = new ArrayList<>();
                         list.add(keys.get(k));
                         list.add(keys.get(i));
@@ -55,8 +45,11 @@ public class p18 {
                         list.add(target1);
                         results.add(list);
                     }
+                    map.put(keys.get(j), map.get(keys.get(j)) + 1);
                 }
+                map.put(keys.get(i), map.get(keys.get(i)) + 1);
             }
+            map.put(keys.get(k), map.get(keys.get(k)) + 1);
         }
 
         return results;
