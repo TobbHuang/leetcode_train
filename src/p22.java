@@ -76,9 +76,10 @@ public class p22 {
         return results;
     }
 
+    class Node {
+        String str;
+        int flag;
+    }
+
 }
 
-class Node {
-    String str;
-    int flag;
-}
